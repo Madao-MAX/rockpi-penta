@@ -64,6 +64,18 @@ case "$model" in
   fi
   checkReboot
   ;;
+*"ROCK 4D"*)
+  if [ "$(is_armbian)" = "true" ]; then
+    armbian_require_overlay rk3576-i2c8-m1 rk3576-pwm1-ch2-m1
+    cp /usr/bin/rockpi-penta/env/rock_pi_4d_armbian.env /etc/rockpi-penta.env
+  else
+    mv /boot/dtbo/rk3576-i2c8-m1.dtbo.disabled /boot/dtbo/rk3576-i2c8-m1.dtbo || true
+    mv /boot/dtbo/rk3576-pwm1-ch2-m1.dtbo.disabled /boot/dtbo/rk3576-pwm1-ch2-m1.dtbo || true
+    cp /usr/bin/rockpi-penta/env/rock_pi_4d.env /etc/rockpi-penta.env
+    u-boot-update || true
+  fi
+  checkReboot
+  ;;
 *"ROCK3 Model C"*)
   mv /boot/dtbo/rk3568-i2c3-m0.dtbo.disabled /boot/dtbo/rk3568-i2c3-m0.dtbo || true
   cp /usr/bin/rockpi-penta/env/rock_3c.env /etc/rockpi-penta.env
